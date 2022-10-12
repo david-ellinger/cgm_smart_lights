@@ -1,0 +1,8 @@
+version: "3.8"
+services:
+  cgm-lights:
+    ports:
+      - "5000:5000"
+    build: .
+    volumes:
+      - .:/app
