@@ -68,7 +68,7 @@ def calculate_color(glucose_value):
     elif glucose_value > 80 and glucose_value <= 90:
         print(f"Glucose Value is {glucose_value} and color is Yellow -> Green")
         return converter.rgb_to_xy(160, 214, 0) # Yellow -> Green
-    elif glucose_value > 100 and glucose_value <= 130:
+    elif glucose_value > 90 and glucose_value <= 130:
         print(f"Glucose Value is {glucose_value} and color is Green")
         return converter.rgb_to_xy(0, 255, 0) # Green
     elif glucose_value > 130 and glucose_value <= 140:
