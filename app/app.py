@@ -65,23 +65,19 @@ def home():
 
 def calculate_color(glucose_value):
     color = None
-    if glucose_value <= 50:
+    if glucose_value < 55:
         color = Colors.RED
-    elif 50 < glucose_value <= 60:
+    elif 55 <= glucose_value <= 69:
         color = Colors.RED_YELLOW
-    elif 60 < glucose_value <= 70:
+    elif 70 <= glucose_value <= 79:
         color = Colors.YELLOW
-    elif 70 < glucose_value <= 80:
-        color = Colors.YELLOW_GREEN
-    elif 80 < glucose_value <= 110:
+    elif 80 <= glucose_value <= 150:
         color = Colors.BLUE
-    elif 110 < glucose_value <= 130:
-        color = Colors.YELLOW_GREEN
-    elif 130 < glucose_value <= 150:
-        color = Colors.YELLOW
-    elif 150 < glucose_value <= 180:
+    elif 150 < glucose_value <= 200:
+        color = Colors.GREEN
+    elif 200 < glucose_value < 250:
         color = Colors.RED_YELLOW
-    elif 180 < glucose_value:
+    elif 250 < glucose_value:
         color = Colors.RED
     else:
         color = Colors.PURPLE
