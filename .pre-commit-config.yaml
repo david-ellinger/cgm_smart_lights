@@ -9,11 +9,11 @@ repos:
     -   id: check-merge-conflict
     -   id: debug-statements
     -   id: requirements-txt-fixer
-- repo: local
-  hooks:
-    - id: black
-      name: black
-      entry: black
-      language: system
-      types: [ python ]
-      files: ^(app/|tests/)
+# - repo: local
+#   hooks:
+#     - id: black
+#       name: black
+#       entry: black
+#       language: system
+#       types: [ python ]
+#       files: ^(app/|tests/)

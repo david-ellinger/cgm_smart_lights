@@ -2,10 +2,10 @@ import logging
 import os
 import threading
 import time
-from enum import Enum
 from sys import stdout
 
 import requests
+from models.colors import Colors
 from dotenv import load_dotenv
 from flask import Flask, render_template
 from pydexcom import Dexcom
@@ -61,16 +61,6 @@ def home():
         light_color=f"({x},{y})",
         light_change=str(light_change_result),
     )
-
-
-class Colors(Enum):
-    BLUE = (0, 0, 255)
-    RED = (255, 0, 0)
-    RED_YELLOW = (255, 193, 0)
-    YELLOW = (255, 255, 0)
-    YELLOW_GREEN = (214, 255, 0)
-    GREEN = (0, 255, 0)
-    PURPLE = (103, 78, 167)
 
 
 def calculate_color(glucose_value):
