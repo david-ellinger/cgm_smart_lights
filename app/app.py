@@ -33,8 +33,11 @@ SECONDS_TO_SLEEP = 120
 def update_lights_workflow():
     logger.info("Update lights...")
     try:
-        bg = None #dexcom.get_current_glucose_reading()
-        value = bg.value if bg is not None else -1
+        bg = dexcom.get_current_glucose_reading()
+        if bg is None:
+            value = -1
+        else:
+            value = bg.value
         x, y = calculate_color(value)
         light_change_result = change_color(x, y)
         logger.debug(light_change_result)
