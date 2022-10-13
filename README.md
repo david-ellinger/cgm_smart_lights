@@ -14,6 +14,8 @@ pip install foobar
 
 To enforce common rules, pre-commit hooks are used
 
+<https://pre-commit.com/>
+
 ```bash
 pre-commit install
 pre-commit run --all-files # To run without a commit

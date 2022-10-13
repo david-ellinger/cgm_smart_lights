@@ -32,10 +32,16 @@ SECONDS_TO_SLEEP = 120
 
 def update_lights_workflow():
     logger.info("Update lights...")
-    bg = dexcom.get_current_glucose_reading()
-    x, y = calculate_color(bg.value)
-    light_change_result = change_color(x, y)
-    logger.debug(light_change_result)
+    try:
+        bg = None #dexcom.get_current_glucose_reading()
+        value = bg.value if bg is not None else -1
+        x, y = calculate_color(value)
+        light_change_result = change_color(x, y)
+        logger.debug(light_change_result)
+    except Exception:
+        logger.exception(f"Could not change light colors")
+
+
 
 
 def interval_query():
@@ -65,7 +71,9 @@ def home():
 
 def calculate_color(glucose_value):
     color = None
-    if glucose_value < 55:
+    if glucose_value == -1:
+        color = Colors.PURPLE
+    elif glucose_value < 55:
         color = Colors.RED
     elif 55 <= glucose_value <= 69:
         color = Colors.RED_YELLOW
