@@ -3,6 +3,9 @@ import os
 import threading
 import time
 import requests
+import logging
+from sys import stdout
+
 from flask import Flask, render_template
 from pydexcom import Dexcom
 from dotenv import load_dotenv
@@ -16,18 +19,27 @@ hue_bridge_username = os.getenv("HUE_BRIDGE_USERNAME")
 app = Flask(__name__, template_folder="templates")
 converter = Converter()
 
+# Setup Logging
+logger = logging.getLogger(__name__)
+logger.setLevel(logging.DEBUG)
+formatter = logging.Formatter('%(asctime)s - %(name)s [%(levelname)s] - %(message)s')
+consoleHandler = logging.StreamHandler(stdout) #set streamhandler to stdout
+consoleHandler.setFormatter(formatter)
+logger.addHandler(consoleHandler)
+
 SECONDS_TO_SLEEP = 60
 
 def update_lights_workflow():
+    logger.info("Update lights...")
     bg = dexcom.get_current_glucose_reading()
-    x,y = calculate_color(95)
+    x,y = calculate_color(bg.value)
     light_change_result = change_color(x,y)
-    print(light_change_result)
+    logger.debug(light_change_result)
 
 def interval_query():
     while True:
         update_lights_workflow()
-        print(f"Sleeping for {SECONDS_TO_SLEEP} seconds...")
+        logger.info(f"Sleeping for {SECONDS_TO_SLEEP} seconds...")
         time.sleep(SECONDS_TO_SLEEP)
 
 thread = threading.Thread(name='interval_query', target=interval_query)
@@ -79,7 +91,7 @@ def calculate_color(glucose_value):
     else:
         color = Colors.PURPLE
 
-    print(f"Glucose Value is {glucose_value} and color is {color.name}")
+    logger.info(f"Glucose Value is {glucose_value} and color is {color.name}")
     return converter.rgb_to_xy(*color.value)
 
 
