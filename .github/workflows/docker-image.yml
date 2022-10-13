@@ -22,7 +22,7 @@ jobs:
       run: docker login -u $DOCKER_USERNAME -p $DOCKER_PASSWORD
 
     - name: Build the Docker image
-      run: docker build . --file Dockerfile --tag cgm_smart_lights:$(date +%s)
+      run: docker build . --file Dockerfile --tag ${{secrets.DOCKER_USERNAME}}/cgm_smart_lights:$(date +%s)
 
     - name: Docker Push
-      run: docker push dellinger/cgm_smart_lights
+      run: docker push ${{secrets.DOCKER_USERNAME}}/cgm_smart_lights
