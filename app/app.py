@@ -27,7 +27,7 @@ consoleHandler = logging.StreamHandler(stdout)  # set streamhandler to stdout
 consoleHandler.setFormatter(formatter)
 logger.addHandler(consoleHandler)
 
-SECONDS_TO_SLEEP = 60
+SECONDS_TO_SLEEP = 120
 
 
 def update_lights_workflow():
