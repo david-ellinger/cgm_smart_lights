@@ -3,6 +3,9 @@ import os
 import threading
 import time
 import requests
+import logging
+from sys import stdout
+
 from flask import Flask, render_template
 from pydexcom import Dexcom
 from dotenv import load_dotenv
@@ -16,18 +19,27 @@ hue_bridge_username = os.getenv("HUE_BRIDGE_USERNAME")
 app = Flask(__name__, template_folder="templates")
 converter = Converter()
 
+# Setup Logging
+logger = logging.getLogger(__name__)
+logger.setLevel(logging.DEBUG)
+formatter = logging.Formatter('%(asctime)s - %(name)s [%(levelname)s] - %(message)s')
+consoleHandler = logging.StreamHandler(stdout) #set streamhandler to stdout
+consoleHandler.setFormatter(formatter)
+logger.addHandler(consoleHandler)
+
 SECONDS_TO_SLEEP = 60
 
 def update_lights_workflow():
+    logger.info("Update lights...")
     bg = dexcom.get_current_glucose_reading()
     x,y = calculate_color(bg.value)
     light_change_result = change_color(x,y)
-    print(light_change_result)
+    logger.debug(light_change_result)
 
 def interval_query():
     while True:
         update_lights_workflow()
-        print(f"Sleeping for {SECONDS_TO_SLEEP} seconds...")
+        logger.info(f"Sleeping for {SECONDS_TO_SLEEP} seconds...")
         time.sleep(SECONDS_TO_SLEEP)
 
 thread = threading.Thread(name='interval_query', target=interval_query)
@@ -37,8 +49,11 @@ thread.start()
 class Colors(Enum):
     BLUE = (0, 0, 255)
     RED = (255, 0, 0)
+    RED_YELLOW = (255,193,0)
     YELLOW = (255, 255, 0)
+    YELLOW_GREEN = (214,255,0)
     GREEN = (0, 255, 0)
+    PURPLE = (103, 78, 167)
 
 @app.route("/")
 def home():
@@ -56,33 +71,28 @@ def home():
 
 
 def calculate_color(glucose_value):
+    color = None
     if glucose_value <= 60:
-        print(f"Glucose Value is {glucose_value} and color is Red")
-        return converter.rgb_to_xy(255,0,0) # Red
-    elif glucose_value > 60 and glucose_value <= 70:
-        print(f"Glucose Value is {glucose_value} and color is Red->Yellow ")
-        return converter.rgb_to_xy(246, 109, 0) # Red -> Yellow
-    elif glucose_value > 70 and glucose_value <= 80:
-        print(f"Glucose Value is {glucose_value} and color is Yellow ")
-        return converter.rgb_to_xy(215, 167, 0) # Yellow
-    elif glucose_value > 80 and glucose_value <= 90:
-        print(f"Glucose Value is {glucose_value} and color is Yellow -> Green")
-        return converter.rgb_to_xy(160, 214, 0) # Yellow -> Green
-    elif glucose_value > 100 and glucose_value <= 130:
-        print(f"Glucose Value is {glucose_value} and color is Green")
-        return converter.rgb_to_xy(0, 255, 0) # Green
-    elif glucose_value > 130 and glucose_value <= 140:
-        print(f"Glucose Value is {glucose_value} and color is Green -> Yellow")
-        return converter.rgb_to_xy(160, 214, 0) # Green -> Yellow
-    elif glucose_value > 140 and glucose_value <= 150:
-        print(f"Glucose Value is {glucose_value} and color is Yellow")
-        return converter.rgb_to_xy(215, 167, 0) # Yellow
-    elif glucose_value > 150 and glucose_value <= 160:
-        print(f"Glucose Value is {glucose_value} and color is Yellow -> Red")
-        return converter.rgb_to_xy(246, 109, 0) # Yellow -> Red
+        color = Colors.RED
+    elif 60 < glucose_value <= 70:
+        color = Colors.RED_YELLOW
+    elif 70 < glucose_value <= 80:
+        color = Colors.YELLOW
+    elif 80 < glucose_value <= 110:
+        color = Colors.BLUE
+    elif 110 < glucose_value <= 130:
+         color = Colors.YELLOW_GREEN
+    elif 130 < glucose_value <= 150:
+         color = Colors.YELLOW
+    elif 150 < glucose_value <= 180:
+         color = Colors.RED_YELLOW
+    elif 180 < glucose_value:
+        color = Colors.RED
     else:
-        print(f"Glucose Value is {glucose_value} and color is Red")
-        return converter.rgb_to_xy(255,0,0) # Red
+        color = Colors.PURPLE
+
+    logger.info(f"Glucose Value is {glucose_value} and color is {color.name}")
+    return converter.rgb_to_xy(*color.value)
 
 
 def change_color(x, y):
