@@ -50,16 +50,6 @@ thread.setDaemon(True)
 thread.start()
 
 
-class Colors(Enum):
-    BLUE = (0, 0, 255)
-    RED = (255, 0, 0)
-    RED_YELLOW = (255, 193, 0)
-    YELLOW = (255, 255, 0)
-    YELLOW_GREEN = (214, 255, 0)
-    GREEN = (0, 255, 0)
-    PURPLE = (103, 78, 167)
-
-
 @app.route("/")
 def home():
     bg = dexcom.get_current_glucose_reading()
@@ -74,14 +64,26 @@ def home():
     )
 
 
+class Colors(Enum):
+    BLUE = (0, 0, 255)
+    RED = (255, 0, 0)
+    RED_YELLOW = (255, 193, 0)
+    YELLOW = (255, 255, 0)
+    YELLOW_GREEN = (214, 255, 0)
+    GREEN = (0, 255, 0)
+    PURPLE = (103, 78, 167)
+
+
 def calculate_color(glucose_value):
     color = None
-    if glucose_value <= 60:
+    if glucose_value <= 50:
         color = Colors.RED
-    elif 60 < glucose_value <= 70:
+    elif 50 < glucose_value <= 60:
         color = Colors.RED_YELLOW
-    elif 70 < glucose_value <= 80:
+    elif 60 < glucose_value <= 70:
         color = Colors.YELLOW
+    elif 70 < glucose_value <= 80:
+        color = Colors.YELLOW_GREEN
     elif 80 < glucose_value <= 110:
         color = Colors.BLUE
     elif 110 < glucose_value <= 130:

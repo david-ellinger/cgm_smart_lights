@@ -17,17 +17,3 @@ repos:
       language: system
       types: [ python ]
       files: ^(app/|tests/)
-    - id: isort
-      name: isort
-      entry: isort
-      language: system
-      types: [ python ]
-      include: ^(app/|tests/)
-      exclude: '.*/migrations/.*'
-      args: [--profile=black]
-    - id: flake8
-      name: flake8
-      entry: flake8
-      language: system
-      types: [ python ]
-      files: ^(app/|tests/)
