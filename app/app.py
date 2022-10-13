@@ -1,14 +1,14 @@
-from enum import Enum
+import logging
 import os
 import threading
 import time
-import requests
-import logging
+from enum import Enum
 from sys import stdout
 
+import requests
+from dotenv import load_dotenv
 from flask import Flask, render_template
 from pydexcom import Dexcom
-from dotenv import load_dotenv
 from rgbxy import Converter
 
 load_dotenv()
@@ -22,19 +22,21 @@ converter = Converter()
 # Setup Logging
 logger = logging.getLogger(__name__)
 logger.setLevel(logging.DEBUG)
-formatter = logging.Formatter('%(asctime)s - %(name)s [%(levelname)s] - %(message)s')
-consoleHandler = logging.StreamHandler(stdout) #set streamhandler to stdout
+formatter = logging.Formatter("%(asctime)s - %(name)s [%(levelname)s] - %(message)s")
+consoleHandler = logging.StreamHandler(stdout)  # set streamhandler to stdout
 consoleHandler.setFormatter(formatter)
 logger.addHandler(consoleHandler)
 
 SECONDS_TO_SLEEP = 60
 
+
 def update_lights_workflow():
     logger.info("Update lights...")
     bg = dexcom.get_current_glucose_reading()
-    x,y = calculate_color(bg.value)
-    light_change_result = change_color(x,y)
+    x, y = calculate_color(bg.value)
+    light_change_result = change_color(x, y)
     logger.debug(light_change_result)
+
 
 def interval_query():
     while True:
@@ -42,32 +44,34 @@ def interval_query():
         logger.info(f"Sleeping for {SECONDS_TO_SLEEP} seconds...")
         time.sleep(SECONDS_TO_SLEEP)
 
-thread = threading.Thread(name='interval_query', target=interval_query)
+
+thread = threading.Thread(name="interval_query", target=interval_query)
 thread.setDaemon(True)
 thread.start()
+
 
 class Colors(Enum):
     BLUE = (0, 0, 255)
     RED = (255, 0, 0)
-    RED_YELLOW = (255,193,0)
+    RED_YELLOW = (255, 193, 0)
     YELLOW = (255, 255, 0)
-    YELLOW_GREEN = (214,255,0)
+    YELLOW_GREEN = (214, 255, 0)
     GREEN = (0, 255, 0)
     PURPLE = (103, 78, 167)
+
 
 @app.route("/")
 def home():
     bg = dexcom.get_current_glucose_reading()
-    x,y = calculate_color(bg.value)
-    light_change_result = change_color(x,y)
+    x, y = calculate_color(bg.value)
+    light_change_result = change_color(x, y)
     return render_template(
         "home.html",
         title="Glucose Reading <> Light Transition",
         reading=f"Glucose Reading: {bg.value} {bg.trend_arrow} {bg.time}",
         light_color=f"({x},{y})",
-        light_change=str(light_change_result)
+        light_change=str(light_change_result),
     )
-
 
 
 def calculate_color(glucose_value):
@@ -81,11 +85,11 @@ def calculate_color(glucose_value):
     elif 80 < glucose_value <= 110:
         color = Colors.BLUE
     elif 110 < glucose_value <= 130:
-         color = Colors.YELLOW_GREEN
+        color = Colors.YELLOW_GREEN
     elif 130 < glucose_value <= 150:
-         color = Colors.YELLOW
+        color = Colors.YELLOW
     elif 150 < glucose_value <= 180:
-         color = Colors.RED_YELLOW
+        color = Colors.RED_YELLOW
     elif 180 < glucose_value:
         color = Colors.RED
     else:
@@ -107,6 +111,7 @@ def change_color(x, y):
         data=data,
     )
     return result.json()
+
 
 if __name__ == "__main__":
     app.run(host="0.0.0.0", debug=True)
