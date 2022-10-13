@@ -10,17 +10,6 @@ Use the package manager [pip](https://pip.pypa.io/en/stable/) to install foobar.
 pip install foobar
 ```
 
-### Pre-Commit
-
-To enforce common rules, pre-commit hooks are used
-
-<https://pre-commit.com/>
-
-```bash
-pre-commit install
-pre-commit run --all-files # To run without a commit
-```
-
 ## Usage
 
 ```python

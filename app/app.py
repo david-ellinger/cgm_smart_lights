@@ -1,5 +1,6 @@
 import logging
 import os
+import sqlite3
 import threading
 import time
 from sys import stdout
@@ -29,6 +30,10 @@ logger.addHandler(consoleHandler)
 
 SECONDS_TO_SLEEP = 120
 
+def get_db_connection():
+    conn = sqlite3.connect('database.db')
+    conn.row_factory = sqlite3.Row
+    return conn
 
 def update_lights_workflow():
     logger.info("Update lights...")
@@ -70,6 +75,13 @@ def home():
         light_color=f"({x},{y})",
         light_change=str(light_change_result),
     )
+
+@app.route("/test")
+def test():
+    conn = get_db_connection()
+    posts = conn.execute('SELECT * FROM posts').fetchall()
+    conn.close()
+    return posts
 
 
 def calculate_color(glucose_value):
