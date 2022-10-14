@@ -28,7 +28,7 @@ consoleHandler = logging.StreamHandler(stdout)  # set streamhandler to stdout
 consoleHandler.setFormatter(formatter)
 logger.addHandler(consoleHandler)
 
-SECONDS_TO_SLEEP = 120
+SECONDS_TO_SLEEP = 60
 
 def get_db_connection():
     conn = sqlite3.connect('database.db')
