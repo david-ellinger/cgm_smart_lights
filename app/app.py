@@ -6,18 +6,37 @@ import time
 from sys import stdout
 
 import requests
-from models.colors import Colors
+from app.models.colors import Colors
 from dotenv import load_dotenv
 from flask import Flask, render_template
 from pydexcom import Dexcom
 from rgbxy import Converter
+from flask_sqlalchemy import SQLAlchemy
 
 load_dotenv()
+db = SQLAlchemy()
 
 dexcom = Dexcom(os.getenv("DEXCOM_USER"), os.getenv("DEXCOM_PASSWORD"))
 hue_bridge_ip = os.getenv("HUE_BRIDGE_IP")
 hue_bridge_username = os.getenv("HUE_BRIDGE_USERNAME")
 app = Flask(__name__, template_folder="templates")
+app.config["SQLALCHEMY_DATABASE_URI"] = "sqlite:///cgmlights.db"
+db.init_app(app)
+
+
+class ApplicationLog(db.Model):
+    # TODO: Move this
+    id = db.Column(db.Integer, primary_key=True)
+    value = db.Column(db.Integer, nullable=False)
+    hue_result = db.Column(db.String)
+    mg_dl = db.Column(db.String)
+    mmol_l = db.Column(db.String)
+    trend = db.Column(db.String)
+    trend_description = db.Column(db.String)
+    trend_arrow = db.Column(db.String)
+    reading_time = db.Column(db.String)
+
+
 converter = Converter()
 
 # Setup Logging
@@ -30,10 +49,6 @@ logger.addHandler(consoleHandler)
 
 SECONDS_TO_SLEEP = 60
 
-def get_db_connection():
-    conn = sqlite3.connect('database.db')
-    conn.row_factory = sqlite3.Row
-    return conn
 
 def update_lights_workflow():
     logger.info("Update lights...")
@@ -46,10 +61,26 @@ def update_lights_workflow():
         x, y = calculate_color(value)
         light_change_result = change_color(x, y)
         logger.debug(light_change_result)
+        with app.app_context():
+            if value > -1:
+                app_log = ApplicationLog(
+                    value=value,
+                    hue_result=str(light_change_result),
+                    mg_dl=str(bg.mg_dl),
+                    mmol_l=str(bg.mmol_l),
+                    trend=str(bg.trend),
+                    trend_description=str(bg.trend_description),
+                    trend_arrow=str(bg.trend_arrow),
+                    reading_time=str(bg.time),
+                )
+            else:
+                app_log = ApplicationLog(
+                    value=value
+                )
+            db.session.add(app_log)
+            db.session.commit()
     except Exception:
         logger.exception(f"Could not change light colors")
-
-
 
 
 def interval_query():
@@ -75,13 +106,6 @@ def home():
         light_color=f"({x},{y})",
         light_change=str(light_change_result),
     )
-
-@app.route("/test")
-def test():
-    conn = get_db_connection()
-    posts = conn.execute('SELECT * FROM posts').fetchall()
-    conn.close()
-    return posts
 
 
 def calculate_color(glucose_value):

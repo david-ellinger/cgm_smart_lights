@@ -6,3 +6,7 @@ services:
     build: .
     volumes:
       - .:/app
+    restart: "always"
+    environment:
+      - FLASK_DEBUG=1
+      - PORT=5000
