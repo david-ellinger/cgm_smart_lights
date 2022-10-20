@@ -1,3 +1,4 @@
+import atexit
 import logging
 import os
 import sqlite3
@@ -146,6 +147,15 @@ def change_color(x, y):
     )
     return result.json()
 
+@atexit.register
+def close_application():
+    color = Colors.WHITE
+    logger.warn(f"Application is shutting down; Turning light {color.name}")
+    x,y = converter.rgb_to_xy(*color.value)
+    change_color(x, y)
+
 
 if __name__ == "__main__":
-    app.run(host="0.0.0.0", debug=True)
+    app.run(host='0.0.0.0', debug=True)
+
+

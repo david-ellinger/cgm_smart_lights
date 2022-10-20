@@ -8,4 +8,5 @@ class Colors(Enum):
     YELLOW = (255, 255, 0)
     YELLOW_GREEN = (214, 255, 0)
     GREEN = (0, 255, 0)
-    PURPLE = (103, 78, 167)
+    PURPLE = (255,0,255)
+    WHITE = (255,255,255)
