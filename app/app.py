@@ -12,6 +12,7 @@ from dotenv import load_dotenv
 from flask import Flask, render_template
 from pydexcom import Dexcom
 from rgbxy import Converter
+from sqlalchemy import desc
 from flask_sqlalchemy import SQLAlchemy
 
 load_dotenv()
@@ -102,10 +103,17 @@ def home():
     light_change_result = change_color(x, y)
     return render_template(
         "home.html",
-        title="Glucose Reading <> Light Transition",
-        reading=f"Glucose Reading: {bg.value} {bg.trend_arrow} {bg.time}",
+        title="Glucose Reading",
+        reading=f"{bg.value} {bg.trend_arrow} {bg.time}",
         light_color=f"({x},{y})",
         light_change=str(light_change_result),
+    )
+
+@app.route("/readings")
+def readings():
+    readings = ApplicationLog.query.order_by(desc(ApplicationLog.reading_time)).paginate(page=1, per_page=50,error_out=False).items
+    return render_template(
+        "readings.html", readings=readings
     )
 
 

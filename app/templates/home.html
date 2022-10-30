@@ -1,14 +1,14 @@
-{% extends 'layout.html' %}
+{% extends 'layout.html' %} {% block css %}
+<link
+  href="{{ url_for('static', filename='css/main.css') }}"
+  rel="stylesheet"
+/>
+{% endblock %} {% block content %}
+<div class="container">
+  <h1>{{title}}</h1>
+  <p>{{reading}}</p>
+  <p>{{light_color}}</p>
+  <p>{{light_change}}</p>
+</div>
 
-{% block css %}
-  <link href="{{ url_for('static', filename='css/home.css') }}" rel="stylesheet">
-{% endblock %}
-
-{% block content %}
-    <div class="container">
-        <h1>{{title}}</h1>
-        <p>{{reading}}</p>
-        <p>{{light_color}}</p>
-        <p>{{light_change}}</p>
-    </div>
 {% endblock %}
