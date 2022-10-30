@@ -10,3 +10,4 @@ class Colors(Enum):
     GREEN = (0, 255, 0)
     PURPLE = (255,0,255)
     WHITE = (255,255,255)
+    DARK_GREEN = (0,100,0)

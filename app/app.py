@@ -42,7 +42,7 @@ converter = Converter()
 
 # Setup Logging
 logger = logging.getLogger(__name__)
-logger.setLevel(logging.DEBUG)
+logger.setLevel(os.environ.get('LOGLEVEL', 'WARNING'))
 formatter = logging.Formatter("%(asctime)s - %(name)s [%(levelname)s] - %(message)s")
 consoleHandler = logging.StreamHandler(stdout)  # set streamhandler to stdout
 consoleHandler.setFormatter(formatter)
@@ -52,7 +52,7 @@ SECONDS_TO_SLEEP = 60
 
 
 def update_lights_workflow():
-    logger.info("Update lights...")
+    logger.debug("Update lights...")
     try:
         bg = dexcom.get_current_glucose_reading()
         if bg is None:
@@ -150,7 +150,8 @@ def change_color(x, y):
 @atexit.register
 def close_application():
     color = Colors.WHITE
-    logger.warn(f"Application is shutting down; Turning light {color.name}")
+    logger.info(f"Application is shutting down; Turning light {color.name}")
+
     x,y = converter.rgb_to_xy(*color.value)
     change_color(x, y)
 
