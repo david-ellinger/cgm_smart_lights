@@ -10,8 +10,16 @@
     flex-wrap: wrap;
 }
 
+
 .name {
     color: #00a36f;
+    text-decoration: none;
+}
+
+nav a {
+    color: #9f41d6;
+    font-size: 3em;
+    margin-left: 50px;
     text-decoration: none;
 }
 
