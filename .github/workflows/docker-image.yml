@@ -28,6 +28,9 @@ jobs:
     - name: Build the Docker image
       run: docker build . --file Dockerfile --tag ${{secrets.DOCKER_USERNAME}}/cgm_smart_lights:$(date +%s)
 
+    - name: Publish to DockerHub
+      run: docker push ${{secrets.DOCKER_USERNAME}}/cgm_smart_lights
+
     - name: Deploy to Northflank
       uses: northflank/deploy-to-northflank@v1
       with:
