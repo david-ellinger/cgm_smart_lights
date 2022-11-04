@@ -34,5 +34,5 @@ jobs:
         northflank-api-key: ${{ secrets.NORTHFLANK_API_KEY }}
         project-id: ${{ env.NORTHFLANK_PROJECT_ID }}
         service-id: ${{ env.NORTHFLANK_SERVICE_ID }}
-        image-path: ${{ steps.meta.outputs.tags }}
-        credentials-id: ${{ env.CREDENTIALS_ID }}
+        image-path: ${{ cgm_smart_lights:$(date +%s) }}
+        credentials-id: ${{ env.NORTHFLANK_CREDENTIALS_ID }}
