@@ -60,7 +60,7 @@ def calculate_color(glucose_value):
         color = Colors.BLUE
     elif 150 < glucose_value <= 200:
         color = Colors.GREEN
-    elif 200 < glucose_value < 250:
+    elif 200 < glucose_value <= 250:
         color = Colors.RED_YELLOW
     elif 250 < glucose_value:
         color = Colors.RED
