@@ -19,6 +19,14 @@ jobs:
       uses: docker/metadata-action@v4
       with:
         images: ${{secrets.DOCKER_USERNAME}}/cgm_smart_lights
+        tags: |
+          type=schedule
+          type=semver,pattern={{version}}
+          type=semver,pattern={{major}}.{{minor}}
+          type=semver,pattern={{major}}
+          type=ref,event=branch
+          type=ref,event=pr
+          type=sha
 
     - name: Set up QEMU
       uses: docker/setup-qemu-action@v2
