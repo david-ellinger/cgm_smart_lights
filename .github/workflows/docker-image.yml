@@ -20,7 +20,7 @@ jobs:
       with:
         images: ${{secrets.DOCKER_USERNAME}}/cgm_smart_lights
         tags: |
-          type=sha,enable=true,priority=100,prefix=-,suffix=,format=short
+          type=sha,enable=true,priority=100,prefix=,suffix=,format=short
 
     - name: Set up QEMU
       uses: docker/setup-qemu-action@v2
