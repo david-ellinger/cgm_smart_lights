@@ -20,10 +20,7 @@ jobs:
       with:
         images: ${{secrets.DOCKER_USERNAME}}/cgm_smart_lights
         tags: |
-          type=schedule
-          type=ref,event=branch
-          type=ref,event=tag
-          type=ref,event=pr
+          type=sha
 
     - name: Set up QEMU
       uses: docker/setup-qemu-action@v2
@@ -42,6 +39,7 @@ jobs:
       uses: docker/build-push-action@v3
       with:
         context: .
+        push:  true
         tags: ${{ steps.meta.outputs.tags }}
         labels: ${{ steps.meta.outputs.labels }}
 
@@ -59,6 +57,5 @@ jobs:
         northflank-api-key: ${{ secrets.NORTHFLANK_API_KEY }}
         project-id: ${{ secrets.NORTHFLANK_PROJECT_ID }}
         service-id: ${{ secrets.NORTHFLANK_SERVICE_ID }}
-        image-path: dellinger/cgm_smart_lights:${{ github.branch }}
+        image-path: ${{secrets.DOCKER_USERNAME}}/cgm_smart_lights:${{github.sha}}
         credentials-id: ${{ secrets.NORTHFLANK_CREDENTIALS_ID }}
-
