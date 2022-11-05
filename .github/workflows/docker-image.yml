@@ -30,6 +30,14 @@ jobs:
         username: ${{ secrets.DOCKER_USERNAME }}
         password: ${{ secrets.DOCKER_PASSWORD }}
 
+    - name: Docker meta
+      id: meta
+      uses: docker/metadata-action@v4
+      with:
+        images: ${{secrets.DOCKER_USERNAME}}/cgm_smart_lights
+        tags: |
+           type=schedule, ref
+
     - name: Build and push
       uses: docker/build-push-action@v3
       with:

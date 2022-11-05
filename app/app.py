@@ -92,8 +92,8 @@ def interval_query():
         time.sleep(SECONDS_TO_SLEEP)
 
 
-thread = threading.Thread(name="interval_query", target=interval_query, daemon=True)
-thread.start()
+# thread = threading.Thread(name="interval_query", target=interval_query, daemon=True)
+# thread.start()
 
 
 @app.route("/")
