@@ -116,6 +116,10 @@ def readings():
         "readings.html", readings=readings
     )
 
+@app.route("/health")
+def health():
+    return
+
 
 def calculate_color(glucose_value):
     color = None
