@@ -22,10 +22,6 @@ app = Flask(__name__, template_folder="templates")
 app.config["SQLALCHEMY_DATABASE_URI"] = "sqlite:///cgmlights.db"
 db.init_app(app)
 
-
-
-
-
 # Setup Logging
 logger = logging.getLogger(__name__)
 logger.setLevel(os.environ.get('LOGLEVEL', 'WARNING'))
@@ -79,7 +75,7 @@ def readings():
 
 @app.route("/health")
 def health():
-    return
+    return True
 
 
 
