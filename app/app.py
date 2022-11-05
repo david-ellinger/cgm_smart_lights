@@ -7,6 +7,7 @@ import time
 from sys import stdout
 
 import requests
+from app.domain import update_lights_workflow
 from dotenv import load_dotenv
 from flask import Flask, render_template
 
@@ -62,6 +63,10 @@ def home():
     #     light_color=f"({x},{y})",
     #     light_change=str(light_change_result),
     # )
+
+@app.route("/reading")
+def reading():
+    update_lights_workflow()
 
 @app.route("/readings")
 def readings():

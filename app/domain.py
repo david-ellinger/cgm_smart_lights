@@ -15,12 +15,11 @@ from flask_sqlalchemy import SQLAlchemy
 db = SQLAlchemy()
 
 def update_lights_workflow():
+    value = -1
     logger.debug("Update lights...")
     try:
         bg = dexcom.get_current_glucose_reading()
-        if bg is None:
-            value = -1
-        else:
+        if bg is not None:
             value = bg.value
         x, y = calculate_color(value)
         light_change_result = hue.change_color(x, y)
@@ -43,6 +42,7 @@ def update_lights_workflow():
                 )
             db.session.add(app_log)
             db.session.commit()
+        return value
     except Exception:
         logger.exception(f"Could not change light colors")
 
