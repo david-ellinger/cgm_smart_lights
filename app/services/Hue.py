@@ -5,7 +5,7 @@ hue_bridge_ip = os.getenv("HUE_BRIDGE_IP")
 hue_bridge_username = os.getenv("HUE_BRIDGE_USERNAME")
 
 class Hue():
-    def change_color(x, y):
+    def change_color(self, x, y):
         headers = {
             "Accept": "application/json",
         }

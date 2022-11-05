@@ -66,7 +66,8 @@ def home():
 
 @app.route("/reading")
 def reading():
-    update_lights_workflow()
+    print(update_lights_workflow())
+    return True
 
 @app.route("/readings")
 def readings():
