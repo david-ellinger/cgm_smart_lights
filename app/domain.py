@@ -24,24 +24,24 @@ def update_lights_workflow():
         x, y = calculate_color(value)
         light_change_result = hue.change_color(x, y)
         logger.debug(light_change_result)
-        with current_app.app_context():
-            if value > -1:
-                app_log = ApplicationLog(
-                    value=value,
-                    hue_result=str(light_change_result),
-                    mg_dl=str(bg.mg_dl),
-                    mmol_l=str(bg.mmol_l),
-                    trend=str(bg.trend),
-                    trend_description=str(bg.trend_description),
-                    trend_arrow=str(bg.trend_arrow),
-                    reading_time=str(bg.time),
-                )
-            else:
-                app_log = ApplicationLog(
-                    value=value
-                )
-            db.session.add(app_log)
-            db.session.commit()
+        # with current_app.app_context():
+        #     if value > -1:
+        #         app_log = ApplicationLog(
+        #             value=value,
+        #             hue_result=str(light_change_result),
+        #             mg_dl=str(bg.mg_dl),
+        #             mmol_l=str(bg.mmol_l),
+        #             trend=str(bg.trend),
+        #             trend_description=str(bg.trend_description),
+        #             trend_arrow=str(bg.trend_arrow),
+        #             reading_time=str(bg.time),
+        #         )
+        #     else:
+        #         app_log = ApplicationLog(
+        #             value=value
+        #         )
+        #     db.session.add(app_log)
+        #     db.session.commit()
         return value
     except Exception:
         logger.exception(f"Could not change light colors")
