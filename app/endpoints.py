@@ -1,5 +1,5 @@
 from flask import current_app, Blueprint, render_template, abort
-from .domain import update_lights_workflow
+from app.domain import update_lights_workflow
 bp = Blueprint('home', __name__, url_prefix='/')
 
 @bp.route("/")

@@ -30,10 +30,10 @@ def setup_logging():
     logger.addHandler(consoleHandler)
 
 
-def register_blueprints(app):
-    from .endpoints import bp
+def register_blueprints(a):
+    from app.endpoints import bp
 
-    app.register_blueprint(bp)
+    a.register_blueprint(bp)
 
 
 # TODO: Evaluate whether to keep this
