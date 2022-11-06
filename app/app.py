@@ -8,6 +8,7 @@ import threading
 
 load_dotenv()
 
+
 def create_app():
     app = Flask(__name__, template_folder="templates")
     # app.config.from_pyfile(config_filename)
@@ -17,13 +18,7 @@ def create_app():
 
     # db.init_app(app)
     register_blueprints(app)
-    start_daemon()
     return app
-
-def start_daemon():
-    thread = threading.Thread(name="interval_query", target=interval_query, daemon=True)
-    thread.start()
-
 
 
 def setup_logging():
@@ -52,4 +47,3 @@ def register_blueprints(a):
 
 #     x,y = converter.rgb_to_xy(*color.value)
 #     change_color(x, y)
-
