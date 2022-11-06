@@ -21,7 +21,7 @@ def home():
 @bp.route("/reading",methods=["POST"])
 def reading():
     value = update_lights_workflow()
-    return str(value) if value > -1 else abort(500)
+    return str(value) if value is not None and value > -1 else abort(500)
 
 @bp.route("/start",methods=["POST"])
 def daemon():
