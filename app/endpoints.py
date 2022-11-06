@@ -1,3 +1,5 @@
+import threading
+from app.daemon import interval_query
 from flask import current_app, Blueprint, render_template, abort
 from app.domain import update_lights_workflow
 bp = Blueprint('home', __name__, url_prefix='/')
@@ -20,6 +22,14 @@ def home():
 def reading():
     value = update_lights_workflow()
     return str(value) if value > -1 else abort(500)
+
+@bp.route("/start",methods=["POST"])
+def daemon():
+    # Temporary solution
+    thread = threading.Thread(name="interval_query", target=interval_query, daemon=True)
+    thread.start()
+    return "Ok"
+
 
 @bp.route("/readings")
 def readings():

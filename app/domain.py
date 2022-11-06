@@ -1,4 +1,3 @@
-from app.data.ApplicationLog import ApplicationLog
 from app.models.colors import Colors
 import logging
 import os
@@ -6,7 +5,6 @@ from app.services.Hue import Hue
 
 from pydexcom import Dexcom
 from rgbxy import Converter
-from flask import current_app
 logger = logging.getLogger()
 converter = Converter()
 dexcom = Dexcom(os.getenv("DEXCOM_USER"), os.getenv("DEXCOM_PASSWORD"))

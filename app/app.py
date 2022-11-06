@@ -1,8 +1,10 @@
 import logging
 import os
 from sys import stdout
+from app.daemon import interval_query
 from dotenv import load_dotenv
 from flask import Flask
+import threading
 
 load_dotenv()
 
@@ -15,7 +17,13 @@ def create_app():
 
     # db.init_app(app)
     register_blueprints(app)
+    start_daemon()
     return app
+
+def start_daemon():
+    thread = threading.Thread(name="interval_query", target=interval_query, daemon=True)
+    thread.start()
+
 
 
 def setup_logging():

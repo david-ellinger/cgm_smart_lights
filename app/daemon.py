@@ -1,4 +1,3 @@
-import threading
 import time
 
 from app.domain import update_lights_workflow
@@ -13,9 +12,3 @@ def interval_query():
         logger.info(f"Sleeping for {SECONDS_TO_SLEEP} seconds...")
         time.sleep(SECONDS_TO_SLEEP)
 
-
-thread = threading.Thread(name="interval_query", target=interval_query, daemon=True)
-
-
-if __name__ == "__main__":
-    thread.start()

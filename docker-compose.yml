@@ -11,4 +11,4 @@ services:
     environment:
       - FLASK_DEBUG=1
       - PORT=5000
-      - LOGLEVEL=INFO
+      - LOGLEVEL=DEBUG
