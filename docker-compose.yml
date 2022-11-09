@@ -8,7 +8,32 @@ services:
     volumes:
       - .:/app
     restart: "always"
-    environment:
-      - FLASK_DEBUG=1
-      - PORT=5000
-      - LOGLEVEL=DEBUG
+    stop_grace_period: "${DOCKER_STOP_GRACE_PERIOD:-3s}"
+    env_file:
+      - ".env"
+    healthcheck:
+      test: "${DOCKER_HEALTHCHECK_TEST:-curl localhost:5000/health}"
+      interval: "60s"
+      timeout: "3s"
+      start_period: "5s"
+      retries: 3
+    depends_on:
+      - "redis"
+
+  redis:
+    env_file:
+      - ".env"
+    image: "redis"
+
+  worker:
+    build:
+      context: "."
+      args:
+        - "FLASK_ENV=DEV"
+    command: celery -A app.worker.celery worker
+    depends_on:
+      - "redis"
+    env_file:
+      - ".env"
+    volumes:
+      - "${DOCKER_WEB_VOLUME:-./public:/app/public}"

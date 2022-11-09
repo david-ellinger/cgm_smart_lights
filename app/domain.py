@@ -1,4 +1,4 @@
-from app.models.colors import Colors
+from app.constants import Colors
 import logging
 import os
 from app.services.Hue import Hue

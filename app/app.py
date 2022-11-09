@@ -1,12 +1,12 @@
 import logging
 import os
 from sys import stdout
-from app.daemon import interval_query
+from app.extensions import register_extensions
 from dotenv import load_dotenv
 from flask import Flask
-import threading
 
 load_dotenv()
+
 
 
 def create_app():
@@ -15,9 +15,18 @@ def create_app():
     app.config["SQLALCHEMY_DATABASE_URI"] = "sqlite:///cgmlights.db"
     setup_logging()
     # from .data.ApplicationLog import db
-
     # db.init_app(app)
     register_blueprints(app)
+    return app
+
+
+def create_worker_app():
+    """Minimal App without routes for celery worker."""
+    app = Flask(__name__)
+    # app.config.from_object(config)
+
+    register_extensions(app, worker=True)
+
     return app
 
 
@@ -37,6 +46,7 @@ def register_blueprints(a):
     from app.endpoints import bp
 
     a.register_blueprint(bp)
+
 
 
 # TODO: Evaluate whether to keep this

@@ -3,7 +3,7 @@ import time
 from app.domain import update_lights_workflow
 import logging
 
-logger = logging.getLogger()
+logger = logging.getLogger(__name__)
 SECONDS_TO_SLEEP = 60
 
 def interval_query():
