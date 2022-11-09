@@ -5,7 +5,7 @@ from app.services.Hue import Hue
 
 from pydexcom import Dexcom
 from rgbxy import Converter
-logger = logging.getLogger()
+logger = logging.getLogger(__name__)
 converter = Converter()
 dexcom = Dexcom(os.getenv("DEXCOM_USER"), os.getenv("DEXCOM_PASSWORD"))
 hue = Hue()
@@ -15,6 +15,7 @@ db = SQLAlchemy()
 def update_lights_workflow():
     value = -1
     logger.debug("Update lights...")
+    print("Update lights...")
     try:
         bg = dexcom.get_current_glucose_reading()
         if bg is not None:
@@ -22,6 +23,8 @@ def update_lights_workflow():
         x, y = calculate_color(value)
         light_change_result = hue.change_color(x, y)
         logger.debug(light_change_result)
+        print(f"Hue result: {light_change_result}")
+
         # with current_app.app_context():
         #     if value > -1:
         #         app_log = ApplicationLog(
@@ -43,6 +46,7 @@ def update_lights_workflow():
         return value
     except Exception:
         logger.exception(f"Could not change light colors")
+        print("Could not change light colors")
 
 def calculate_color(glucose_value):
     color = None
@@ -66,4 +70,5 @@ def calculate_color(glucose_value):
         color = Colors.PURPLE
 
     logger.info(f"Glucose Value is {glucose_value} and color is {color.name}")
+    print(f"Glucose Value is {glucose_value} and color is {color.name}")
     return converter.rgb_to_xy(*color.value)
