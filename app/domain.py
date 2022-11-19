@@ -12,7 +12,6 @@ hue = Hue()
 
 def update_lights_workflow():
     value = -1
-    print("Update lights...")
     try:
         bg = dexcom.get_current_glucose_reading()
         if bg is not None:
