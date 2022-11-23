@@ -1,8 +1,7 @@
-from models.colors import Colors
 import logging
 import os
-from services.Hue import Hue
-
+from app.services.Hue import Hue
+from app.domain.colors import Colors
 from pydexcom import Dexcom
 from rgbxy import Converter
 logger = logging.getLogger()

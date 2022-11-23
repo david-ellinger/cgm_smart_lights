@@ -1,25 +1,8 @@
 version: "3.8"
 services:
-  cron:
-    build: .
-    restart: always
-    volumes:
-      - .:/app
-    env_file:
-      - .env
-    command: ["crond", "-f"]
-    environment:
-      DEXCOM_OAUTH_CLIENT_ID: ${DEXCOM_OAUTH_CLIENT_ID}
-      DEXCOM_OAUTH_CLIENT_SECRET: ${DEXCOM_OAUTH_CLIENT_SECRET}
-      DEXCOM_PASSWORD: ${DEXCOM_PASSWORD}
-      DEXCOM_USER: ${DEXCOM_USER}
-      HUE_BRIDGE_IP: ${HUE_BRIDGE_IP}
-      HUE_BRIDGE_USERNAME: ${HUE_BRIDGE_USERNAME}
-      HUE_BRIDGE_CLIENT_KEY: ${HUE_BRIDGE_CLIENT_KEY}
-
-
   cgm-lights:
     build: .
+    restart: unless-stopped
     volumes:
       - .:/app
     env_file:
@@ -32,6 +15,5 @@ services:
       HUE_BRIDGE_IP: ${HUE_BRIDGE_IP}
       HUE_BRIDGE_USERNAME: ${HUE_BRIDGE_USERNAME}
       HUE_BRIDGE_CLIENT_KEY: ${HUE_BRIDGE_CLIENT_KEY}
-    command: ["python","app/daemon.py"]
 
 
