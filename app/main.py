@@ -1,4 +1,5 @@
 from app.background_task import UpdateLightsTask
+from app.domain.workflow_manager import clear_light
 from app.routers.status import router as status_router
 from fastapi import FastAPI
 import uvicorn
@@ -10,6 +11,10 @@ app.include_router(status_router)
 async def startup_event():
     thread = UpdateLightsTask()
     thread.start()
+
+@app.on_event("shutdown")
+def shutdown_event():
+    clear_light()
 
 @app.get("/")
 async def root():

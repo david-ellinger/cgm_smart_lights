@@ -23,6 +23,11 @@ def update_lights_workflow():
         logger.exception(f"Could not change light colors")
         print("Could not change light colors")
 
+def clear_light():
+    x,y = converter.rgb_to_xy(*Colors.WHITE.value)
+    hue.change_color(x, y)
+    print("Setting light to default light")
+
 def calculate_color(glucose_value):
     color = None
     if glucose_value == -1:
