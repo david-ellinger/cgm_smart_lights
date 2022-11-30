@@ -1,1 +1,0 @@
-*/1 * * * * python /app/app/daemon.py | tee -a /app/logfile >/dev/null
